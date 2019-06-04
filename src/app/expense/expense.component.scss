@@ -1,0 +1,19 @@
+button{
+    border-radius: 50%;
+}
+
+.add-button{
+    position: fixed;
+    top: 100%;
+    left: 100%;
+    transform: translate(-80px,-80px);
+}
+
+.input-style{
+    height: fit-content;
+    padding: 4px;    
+}
+
+.button-delete{
+    margin-top: 4px;
+}
