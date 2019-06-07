@@ -1,33 +1,68 @@
 <form [formGroup]="expenseForm">
-  
-  <div class="col">
-    <input type="text" class="form-control" formControlName="income">
-  </div>
 
-      <div class="container" formArrayName="expenses">
-        <div class="row" *ngFor="let ingredientCtrl of expenseForm.get('expenses').controls; let i = index" [formGroupName]="i">
+  <div class="container">
 
-          <div class="col-8 input-style">
-            <input type="text" class="form-control" formControlName="name" (blur)="onDeleteEmptyRow(i)">
-          </div>
+    <div class="row bg-dark justify-content-center pt-1" >
+      <div class="col-4  offset-3">
+        <mat-form-field class="m-0" style="max-width: 100px;">
+          <input  style="color: white;" matInput type="number" placeholder="Income" class="text-right" formControlName="income" (input)=calculateTotalExpenses()>
+          <span  style="color: white;" matPrefix>$&nbsp;</span>
+          <span  style="color: white;" matSuffix>.00</span>
+        </mat-form-field>
+      </div>
+    </div>
 
-          <div class="col-3 input-style">
-            <div class="input-group">
-              <div class="input-group">
-                <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)"
-                  formControlName="amount" (blur)="onDeleteEmptyRow(i)">
-                <div class="input-group-append"><span class="input-group-text">$</span></div>
-              </div>
-            </div>
-          </div>
+    <div formArrayName="expenses" class="row p-0" style="background-color: gainsboro;" #scrollable>
+      <div class="row justify-content-center m-0" style="width: 100%;"
+        *ngFor="let ingredientCtrl of expenseForm.get('expenses').controls; let i = index" [formGroupName]="i" [ngClass] ="{odd: i%2 === 0}" >
 
-          <div class="col-1 input-style">
-            <button type="button" class="btn btn-danger btn-sm button-delete" (click)="onDeleteExpense(i)">X</button>
-          </div>
+        <mat-form-field class="col-6" style="width: 100%;">
+          <input type="text" matInput formControlName="expenseName" [matAutocomplete]="autoGroup">
+          <mat-autocomplete #autoGroup="matAutocomplete">
+            <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
+              <mat-option *ngFor="let name of group.names" [value]="name" class="mat-group">
+                {{name}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <div class="col-4 p-0">
+          <mat-form-field style="max-width: 100px;">
+            <input matInput type="number" class="text-right" formControlName="amount" (blur)="onAmountLeave(i)"
+              (keyup.enter)="onAmountPressEnter(i)">
+            <span matPrefix>$&nbsp;</span>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+        </div>
+
+        <div class="col align-self-center">
+          <button type="button" class="btn btn-danger btn-sm" (click)="onDeleteExpense(i)">X</button>
         </div>
 
       </div>
+    </div>
+  </div>
 
-
-  <button type="button" class="btn btn-danger btn-primary btn-lg add-button" [disabled]="!expenseForm.valid"  (click)="onAddExpense()">+</button>
 </form>
+
+<nav class="navbar fixed-bottom navbar-light bg-dark">
+
+  <div class="row w-100">
+    <div class="col-6">
+      <button type="button" class="btn btn-danger btn-lg add-button" [disabled]="!expenseForm.valid"
+        (click)="onAddExpense()">+</button>
+    </div>
+
+    <div class="col-3">
+      <p class="text-light  m-0">Expended:</p>
+      <p class="text-light  m-0">Saved:</p>
+    </div>
+    <div class="col-3 text-left">
+      <p class="text-light m-0"> {{totalExpended}} $</p>
+      <p class="text-light  m-0">{{totalSave}} $</p>
+    </div>
+  </div>
+
+
+</nav>
