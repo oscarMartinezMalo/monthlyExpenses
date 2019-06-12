@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import {Observable} from 'rxjs';
-import {startWith, map} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
 // Option groups autocomplete
 export interface StateGroup {
@@ -23,6 +23,7 @@ export const _filter = (opt: string[], value: string): string[] => {
   styleUrls: ['./expense.component.scss']
 })
 export class ExpenseComponent implements OnInit {
+  @ViewChild('scrollMe', { static: true }) myScrollContainer: ElementRef;
 
   // Reactive form
   expenseForm: FormGroup;
@@ -79,7 +80,7 @@ export class ExpenseComponent implements OnInit {
   private _filterGroup(value: string): StateGroup[] {
     if (value) {
       return this.stateGroups
-        .map(group => ({letter: group.letter, names: _filter(group.names, value)}))
+        .map(group => ({ letter: group.letter, names: _filter(group.names, value) }))
         .filter(group => group.names.length > 0);
     }
 
@@ -95,7 +96,14 @@ export class ExpenseComponent implements OnInit {
       income: new FormControl(monthlyIncome, [Validators.pattern(/^[1-9]+[0-9]*$/)]),
       expenses: expensesArray
     });
-    this.onAddExpense();
+
+    // This code if you want to start with one empty
+    // this.onAddExpense();
+
+    // Calculate everything when a change is detected
+    this.expenseForm.valueChanges.subscribe(() => {
+      this.calculateTotalExpenses();
+    });
   }
 
 
@@ -107,21 +115,21 @@ export class ExpenseComponent implements OnInit {
         // name: new FormControl(null, Validators.required),
         amount: new FormControl(null, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
       })
-
     );
 
     // tslint:disable-next-line:no-non-null-assertion
     this.stateGroupOptions = ((this.expenseForm.get('expenses') as FormArray).at(0) as FormGroup).controls.expenseName!.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filterGroup(value))
-    );
+      .pipe(
+        startWith(''),
+        map(value => this._filterGroup(value))
+      );
+    // this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
 
   }
 
   onDeleteExpense(index: number) {
     (this.expenseForm.get('expenses') as FormArray).removeAt(index);
-    this.calculateTotalExpenses();
+    // this.calculateTotalExpenses();
   }
 
   onNameLeave(index: number) {
@@ -133,11 +141,11 @@ export class ExpenseComponent implements OnInit {
 
   onAmountLeave(index: number) {
     this.onNameLeave(index);
-    this.calculateTotalExpenses();
+    // this.calculateTotalExpenses();
   }
 
   calculateTotalExpenses() {
-// Recalcule the expenses
+    // Recalcule the expenses
     this.totalExpended = 0;
     for (let i = 0; i < (this.expenseForm.get('expenses') as FormArray).length; i++) {
       this.totalExpended += ((this.expenseForm.get('expenses') as FormArray).at(i) as FormGroup).controls.amount.value;
@@ -146,7 +154,7 @@ export class ExpenseComponent implements OnInit {
   }
 
   onAmountPressEnter(index) {
-// Check if the cursor is in the last Amount and if the form is valid add a new line
+    // Check if the cursor is in the last Amount and if the form is valid add a new line
     if ((index === ((this.expenseForm.get('expenses') as FormArray).length) - 1) && this.expenseForm.valid) {
       (this.expenseForm.get('expenses') as FormArray).push(
         new FormGroup({

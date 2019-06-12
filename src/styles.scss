@@ -1,3 +1,25 @@
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white, 50%)) {
+    ::-webkit-scrollbar {
+        width:  $size;
+        height: $size;
+    }
+  
+    ::-webkit-scrollbar-thumb {
+        background: $foreground-color;
+    }
+  
+    ::-webkit-scrollbar-track {
+        background: $background-color;
+    }
+  
+    // For Internet Explorer
+    body {
+      scrollbar-face-color: $foreground-color;
+      scrollbar-track-color: $background-color;
+    }
+  }
+
+  @include scrollbars(.5em, #6f4045 );
 /* You can add global styles to this file, and also import other style files */
 // html, body { height: 100%; }
 body { 
@@ -5,3 +27,8 @@ body {
     margin-bottom: 64px; // size of the footer height
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.bg-dark{
+    background-color: #6f4045 !important
+}
+

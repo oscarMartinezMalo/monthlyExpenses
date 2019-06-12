@@ -2,22 +2,17 @@ button{
     border-radius: 50%;
 }
 
-.mat-form-field{
-    max-width: 160px;
-    margin-right: 5px;
-    margin-left: 5px;
-}
-
-.mat-optgroup .mat-option {
-    padding-left: 10px;
-}
-
-
-.mat-group {
-    height: 25px!important;
-    padding: 0 16px!important;
-}
-
 .odd{
     background-color:darkgray;
 }
+
+.ngFor-container{
+    max-height: -webkit-calc(100vh - 230px);
+    max-height:    -moz-calc(100vh- 230px);
+    max-height:         calc(100vh - 230px);
+}
+
+
+
+
+
