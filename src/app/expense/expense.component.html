@@ -1,8 +1,8 @@
 
 <form [formGroup]="expenseForm" class="container">
 
-  <div class="row bg-dark justify-content-center">
-    <div class="col-4  offset-3">
+  <div class="row bg-dark justify-content-center pt-2">
+    <div class="col-4 offset-4 offset-sm-9">
       <mat-form-field class="m-0" style="max-width: 100px;">
         <input style="color: white;" matInput type="number" placeholder="Income" class="text-right"
           formControlName="income" (input)=calculateTotalExpenses()>
@@ -17,13 +17,15 @@
     
     <div class="row" style="margin: auto;"
       *ngFor="let expenseCtrl of expenseForm.get('expenses').controls; let i = index" [formGroupName]="i"
-      [ngClass]="{odd: i%2 === 0}">
-
-      <div class="col-6 pl-3 pr-1">
+      [ngClass]="{odd: i%2 === 0, padding: i ===0}"
+    >
+      <div class="col-6 pl-3 pr-1 text-right">
         <mat-form-field  style="width: 100%; max-width: 300px;">
-          <input type="text" matInput formControlName="expenseName" [placeholder]="Hello" [matAutocomplete]="autoGroup">
+          <input type="text" matInput formControlName="expenseName"            
+          [placeholder] = "i===0 ? 'Expense' : ''" 
+          [matAutocomplete]="autoGroup">
           <mat-autocomplete #autoGroup="matAutocomplete">
-            <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
+            <mat-optgroup *ngFor="let group of expenseGroupOptions | async" [label]="group.letter">
               <mat-option *ngFor="let name of group.names" [value]="name" class="mat-group">
                 {{name}}
               </mat-option>
@@ -32,16 +34,16 @@
         </mat-form-field>
       </div>
 
-      <div class="col-4 pl-1 pr-1">
+      <div class="col-4 pl-1 pr-1  text-right">
         <mat-form-field style="width: 100%; max-width: 100px;">
-          <input matInput type="number" class="text-right" formControlName="amount" (blur)="onAmountLeave(i)" placeholder="Amount"
+          <input matInput type="number" class="text-right" formControlName="amount" (blur)="onAmountLeave(i)" [placeholder] = "i===0 ? 'Amount' : ''"
             (keyup.enter)="onAmountPressEnter(i)">
           <span matPrefix>$&nbsp;</span>
           <span matSuffix>.00</span>
         </mat-form-field>
       </div>
 
-      <div class="col-2  align-self-center">
+      <div class="col-2  align-self-center text-right">
         <button type="button" class="btn btn-danger btn-sm" (click)="onDeleteExpense(i)">X</button>
       </div>
 
@@ -53,12 +55,12 @@
 <nav class="navbar fixed-bottom navbar-light bg-dark">
 
   <div class="row w-100">
-    <div class="col-5">
+    <div class="col-5  text-center">
       <button type="button" class="btn btn-danger btn-lg add-button" [disabled]="!expenseForm.valid"
         (click)="onAddExpense()">+</button>
     </div>
 
-    <div class="col-3">
+    <div class="col-3  text-right">
       <p class="text-light  m-0">Expended:</p>
       <p class="text-light  m-0">Saved:</p>
     </div>

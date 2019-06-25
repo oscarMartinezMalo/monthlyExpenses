@@ -1,5 +1,8 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport
+  <mat-sidenav #drawer 
+      class="sidenav"   
+      fixedInViewport   
+      [ngClass]="{hidden: !(isHandset$ | async) }"
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
@@ -22,8 +25,12 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>walletExpenses</span>
+      <span class="spacer"></span>
+      <a href="#" *ngIf="!(isHandset$ | async)">Link 1</a>
+      <a href="#" *ngIf="!(isHandset$ | async)">Link 2</a>
+      <a href="#" *ngIf="!(isHandset$ | async)">Link 3</a>
     </mat-toolbar>
-
+<ng-content></ng-content>
   </mat-sidenav-content>
 
 </mat-sidenav-container>

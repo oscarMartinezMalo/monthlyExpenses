@@ -2,12 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-
-// Option groups autocomplete
-export interface StateGroup {
-  letter: string;
-  names: string[];
-}
+import { ExpenseService, DropDownCategory } from './expense.service';
 
 // tslint:disable-next-line:variable-name
 export const _filter = (opt: string[], value: string): string[] => {
@@ -29,107 +24,61 @@ export class ExpenseComponent implements OnInit {
   expenseForm: FormGroup;
   totalExpended = 0;
   totalSave = 0;
+  // Load the dropdown Data
+  expenseCategories = this.expenseService.getDrownDownCategory();
+  expenseGroupOptions: Observable<DropDownCategory[]>;
 
-  // stateForm: FormGroup = this._formBuilder.group({
-  //   stateGroup: '',
-  // });
-
-  stateGroups: StateGroup[] = [{
-    letter: 'C',
-    names: ['Car Loan', 'Car Insurance', 'Car Gas', 'Car Toll', 'Car Parking', 'Car Maintenance', 'Car Appliances', 'Clothing']
-  }, {
-    letter: 'F',
-    names: ['Food']
-  }, {
-    letter: 'G',
-    names: ['Gifts']
-  }, {
-    letter: 'H',
-    names: ['Households', 'Health Care']
-  }, {
-    letter: 'I',
-    names: ['Internet']
-  }, {
-    letter: 'P',
-    names: ['Power & Light', 'Phone Service', 'Phone payments', 'Personal hygiene']
-  }, {
-    letter: 'R',
-    names: ['Restaurant']
-  }, {
-    letter: 'U',
-    names: ['Uber, Lyft']
-  }];
-
-
-  stateGroupOptions: Observable<StateGroup[]>;
-  // tslint:disable-next-line:variable-name
-  // constructor(private _formBuilder: FormBuilder) { }
+  constructor(private expenseService: ExpenseService) { }
 
   ngOnInit() {
     this.initForm();
-    // tslint:disable-next-line:no-non-null-assertion
-
-    // tslint:disable-next-line:no-non-null-assertion
-    // this.stateGroupOptions = this.expenseForm.get('stateGroup')!.valueChanges
-    //   .pipe(
-    //     startWith(''),
-    //     map(value => this._filterGroup(value))
-    //   );
-  }
-
-  private _filterGroup(value: string): StateGroup[] {
-    if (value) {
-      return this.stateGroups
-        .map(group => ({ letter: group.letter, names: _filter(group.names, value) }))
-        .filter(group => group.names.length > 0);
-    }
-
-    return this.stateGroups;
   }
 
   private initForm() {
-    const monthlyIncome = '';
+    let monthlyIncome = 0;
     const expensesArray = new FormArray([]);
 
+    // Get data from the service
+    const personExpenses = this.expenseService.getExpense();
+    monthlyIncome = personExpenses.inconme;
 
+    // Create the formGroup that is linked with the html form
     this.expenseForm = new FormGroup({
       income: new FormControl(monthlyIncome, [Validators.pattern(/^[1-9]+[0-9]*$/)]),
       expenses: expensesArray
     });
 
-    // This code if you want to start with one empty
-    // this.onAddExpense();
+    // Load the expenses comming from the service
+    for (const monthlyExpense of personExpenses.monthlyExpenses) {
+      this.createExpense(monthlyExpense.type, monthlyExpense.amount);
+    }
 
-    // Calculate everything when a change is detected
+    // This code if you want to start with one empty
+    this.createExpense('', null);
+
+    // Calculate the Expended and Saved when a change is detected
     this.expenseForm.valueChanges.subscribe(() => {
       this.calculateTotalExpenses();
     });
+
   }
 
-
-  onAddExpense() {
-
-    (this.expenseForm.get('expenses') as FormArray).push(
-      new FormGroup({
-        expenseName: new FormControl(''),
-        // name: new FormControl(null, Validators.required),
-        amount: new FormControl(null, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
-      })
-    );
-
-    // tslint:disable-next-line:no-non-null-assertion
-    this.stateGroupOptions = ((this.expenseForm.get('expenses') as FormArray).at(0) as FormGroup).controls.expenseName!.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filterGroup(value))
-      );
-    // this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-
+  // Dropdown method
+  private _filterGroup(value: string): DropDownCategory[] {
+    if (value) {
+      return this.expenseCategories
+        .map(group => ({ letter: group.letter, names: _filter(group.names, value) }))
+        .filter(group => group.names.length > 0);
+    }
+    return this.expenseCategories;
   }
 
   onDeleteExpense(index: number) {
     (this.expenseForm.get('expenses') as FormArray).removeAt(index);
-    // this.calculateTotalExpenses();
+  }
+
+  onAddExpense() {
+    this.createExpense('', null);
   }
 
   onNameLeave(index: number) {
@@ -141,11 +90,29 @@ export class ExpenseComponent implements OnInit {
 
   onAmountLeave(index: number) {
     this.onNameLeave(index);
-    // this.calculateTotalExpenses();
+  }
+
+  createExpense( type: string, amount: number) {
+    // tslint:disable-next-line:prefer-const
+    let expenseGroupOptions: Observable<DropDownCategory[]>;
+
+    const FormGroupCreated = new FormGroup({
+      expenseName: new FormControl(type),
+      amount: new FormControl(amount, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
+    });
+
+    (this.expenseForm.get('expenses') as FormArray).push( FormGroupCreated );
+
+    // tslint:disable-next-line:no-non-null-assertion
+    this.expenseGroupOptions = FormGroupCreated.controls.expenseName!.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filterGroup(value))
+      );
   }
 
   calculateTotalExpenses() {
-    // Recalcule the expenses
+    // Recalculate the expenses
     this.totalExpended = 0;
     for (let i = 0; i < (this.expenseForm.get('expenses') as FormArray).length; i++) {
       this.totalExpended += ((this.expenseForm.get('expenses') as FormArray).at(i) as FormGroup).controls.amount.value;
