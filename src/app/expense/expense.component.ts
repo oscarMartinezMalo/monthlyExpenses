@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@ang
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { ExpenseService, DropDownCategory } from './expense.service';
+import { PersoneExpense } from './persone-expense.model';
 
 // tslint:disable-next-line:variable-name
 export const _filter = (opt: string[], value: string): string[] => {
@@ -24,6 +25,7 @@ export class ExpenseComponent implements OnInit {
   expenseForm: FormGroup;
   totalExpended = 0;
   totalSave = 0;
+
   // Load the dropdown Data
   expenseCategories = this.expenseService.getDrownDownCategory();
   expenseGroupOptions: Observable<DropDownCategory[]>;
@@ -35,12 +37,8 @@ export class ExpenseComponent implements OnInit {
   }
 
   private initForm() {
-    let monthlyIncome = 0;
     const expensesArray = new FormArray([]);
-
-    // Get data from the service
-    const personExpenses = this.expenseService.getExpense();
-    monthlyIncome = personExpenses.inconme;
+    let monthlyIncome = 0;
 
     // Create the formGroup that is linked with the html form
     this.expenseForm = new FormGroup({
@@ -48,17 +46,32 @@ export class ExpenseComponent implements OnInit {
       expenses: expensesArray
     });
 
-    // Load the expenses comming from the service
-    for (const monthlyExpense of personExpenses.monthlyExpenses) {
-      this.createExpense(monthlyExpense.type, monthlyExpense.amount);
-    }
+    this.expenseService.getExpense().
+      subscribe(
+        (response) => {
+          const personExpenses = response;
+          monthlyIncome = personExpenses.income;
+          this.expenseForm.controls.income.setValue(monthlyIncome);
+
+          // Load the expenses comming from the service
+          for (const monthlyExpense of personExpenses.expenses) {
+            this.createExpense(monthlyExpense.type, monthlyExpense.amount);
+          }
+        });
 
     // This code if you want to start with one empty
-    this.createExpense('', null);
+      // this.createExpense('', null);
 
     // Calculate the Expended and Saved when a change is detected
     this.expenseForm.valueChanges.subscribe(() => {
       this.calculateTotalExpenses();
+
+      this.expenseService.storeExpenses(this.expenseForm.value).
+        subscribe(
+          (resp) => {
+            console.log(resp);
+          }
+        );
     });
 
   }
@@ -83,7 +96,7 @@ export class ExpenseComponent implements OnInit {
 
   onNameLeave(index: number) {
     const rowValue = ((this.expenseForm.get('expenses') as FormArray).at(index) as FormGroup).controls;
-    if (rowValue.amount.value == null && rowValue.expenseName.value === '') {
+    if (rowValue.amount.value == null && rowValue.type.value === '') {
       (this.expenseForm.get('expenses') as FormArray).removeAt(index);
     }
   }
@@ -92,19 +105,19 @@ export class ExpenseComponent implements OnInit {
     this.onNameLeave(index);
   }
 
-  createExpense( type: string, amount: number) {
+  createExpense(type: string, amount: number) {
     // tslint:disable-next-line:prefer-const
     let expenseGroupOptions: Observable<DropDownCategory[]>;
 
     const FormGroupCreated = new FormGroup({
-      expenseName: new FormControl(type),
+      type: new FormControl(type),
       amount: new FormControl(amount, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
     });
 
-    (this.expenseForm.get('expenses') as FormArray).push( FormGroupCreated );
+    (this.expenseForm.get('expenses') as FormArray).push(FormGroupCreated);
 
     // tslint:disable-next-line:no-non-null-assertion
-    this.expenseGroupOptions = FormGroupCreated.controls.expenseName!.valueChanges
+    this.expenseGroupOptions = FormGroupCreated.controls.type!.valueChanges
       .pipe(
         startWith(''),
         map(value => this._filterGroup(value))
@@ -125,7 +138,7 @@ export class ExpenseComponent implements OnInit {
     if ((index === ((this.expenseForm.get('expenses') as FormArray).length) - 1) && this.expenseForm.valid) {
       (this.expenseForm.get('expenses') as FormArray).push(
         new FormGroup({
-          expenseName: new FormControl(null, Validators.required),
+          type: new FormControl(null, Validators.required),
           amount: new FormControl(null, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
         })
       );

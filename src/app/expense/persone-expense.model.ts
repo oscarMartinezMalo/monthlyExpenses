@@ -1,11 +1,11 @@
 import { MonthlyExpense } from './monthly-expense.component';
 
 export class PersoneExpense {
-    inconme: number;
-    public monthlyExpenses: MonthlyExpense[] = [];
+    income: number;
+    public expenses: MonthlyExpense[] = [];
 
-    constructor(income: number, MonthlyExpenses: MonthlyExpense[]) {
-        this.inconme = income;
-        this.monthlyExpenses = MonthlyExpenses;
+    constructor(income: number, expenses: MonthlyExpense[]) {
+        this.income = income;
+        this.expenses = expenses;
       }
 }
