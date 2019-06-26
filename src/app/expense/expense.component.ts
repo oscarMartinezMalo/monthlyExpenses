@@ -38,7 +38,7 @@ export class ExpenseComponent implements OnInit {
 
   private initForm() {
     const expensesArray = new FormArray([]);
-    let monthlyIncome = 0;
+    const monthlyIncome = 0;
 
     // Create the formGroup that is linked with the html form
     this.expenseForm = new FormGroup({
@@ -49,18 +49,25 @@ export class ExpenseComponent implements OnInit {
     this.expenseService.getExpense().
       subscribe(
         (response) => {
-          const personExpenses = response;
-          monthlyIncome = personExpenses.income;
-          this.expenseForm.controls.income.setValue(monthlyIncome);
+          if (response !== null) {
+            const personExpenses = response;
 
-          // Load the expenses comming from the service
-          for (const monthlyExpense of personExpenses.expenses) {
-            this.createExpense(monthlyExpense.type, monthlyExpense.amount);
+            if (personExpenses.income !== null) {
+              this.expenseForm.controls.income.setValue(personExpenses.income);
+            }
+
+            if (personExpenses.expenses != null) {
+              // Load the expenses comming from the service
+              for (const monthlyExpense of personExpenses.expenses) {
+                this.createExpense(monthlyExpense.type, monthlyExpense.amount);
+              }
+            }
           }
+
         });
 
     // This code if you want to start with one empty
-      // this.createExpense('', null);
+    // this.createExpense('', null);
 
     // Calculate the Expended and Saved when a change is detected
     this.expenseForm.valueChanges.subscribe(() => {
@@ -69,7 +76,7 @@ export class ExpenseComponent implements OnInit {
       this.expenseService.storeExpenses(this.expenseForm.value).
         subscribe(
           (resp) => {
-            console.log(resp);
+            // console.log(resp);
           }
         );
     });
@@ -130,6 +137,7 @@ export class ExpenseComponent implements OnInit {
     for (let i = 0; i < (this.expenseForm.get('expenses') as FormArray).length; i++) {
       this.totalExpended += ((this.expenseForm.get('expenses') as FormArray).at(i) as FormGroup).controls.amount.value;
     }
+
     this.totalSave = this.expenseForm.value.income - this.totalExpended;
   }
 

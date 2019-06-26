@@ -67,7 +67,6 @@ export class ExpenseService {
             .pipe(
                 map(response => {
                     return response;
-                    // console.log(response);
                 }),
                 catchError((errorResponse: HttpErrorResponse) => {
 
@@ -91,7 +90,6 @@ export class ExpenseService {
     }
 
     storeExpenses(personeExpense: PersoneExpense) {
-        console.log(personeExpense);
         return this.http.put<PersoneExpense>(this.rootUrl + 'expenses.json', personeExpense);
         // .pipe(
         //   catchError(this.handleError('updateHero', hero))
