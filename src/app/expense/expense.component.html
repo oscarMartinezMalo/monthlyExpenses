@@ -1,8 +1,9 @@
-
 <form [formGroup]="expenseForm" class="container">
 
   <div class="row bg-dark justify-content-center pt-2">
-    <div class="col-4 offset-4 offset-sm-9">
+    
+    <!-- <div class="col-4 offset-4 offset-sm-9">       -->
+    <div class="col-6">
       <mat-form-field class="m-0" style="max-width: 100px;">
         <input style="color: white;" matInput type="number" placeholder="Income" class="text-right"
           formControlName="income" (input)=calculateTotalExpenses()>
@@ -12,18 +13,16 @@
     </div>
   </div>
 
-  <div #scrollMe formArrayName="expenses" class="ngFor-container mt-4" style="overflow-y: scroll; background-color: gainsboro;"
-    [scrollTop]="scrollMe.scrollHeight">
-    
+  <div #scrollMe formArrayName="expenses" class="ngFor-container mt-4"
+    style="overflow-y: scroll; background-color: gainsboro;" [scrollTop]="scrollMe.scrollHeight">
+
     <div class="row" style="margin: auto;"
       *ngFor="let expenseCtrl of expenseForm.get('expenses').controls; let i = index" [formGroupName]="i"
-      [ngClass]="{odd: i%2 === 0, padding: i ===0}"
-    >
+      [ngClass]="{odd: i%2 === 0, padding: i ===0}">
       <div class="col-6 pl-3 pr-1 text-right">
-        <mat-form-field  style="width: 100%; max-width: 300px;">
-          <input type="text" matInput formControlName="type"            
-          [placeholder] = "i===0 ? 'Expense' : ''" 
-          [matAutocomplete]="autoGroup">
+        <mat-form-field style="width: 100%; max-width: 300px;">
+          <input type="text" matInput formControlName="type" [placeholder]="i===0 ? 'Expense' : ''"
+            [matAutocomplete]="autoGroup">
           <mat-autocomplete #autoGroup="matAutocomplete">
             <mat-optgroup *ngFor="let group of expenseGroupOptions | async" [label]="group.letter">
               <mat-option *ngFor="let name of group.names" [value]="name" class="mat-group">
@@ -36,8 +35,8 @@
 
       <div class="col-4 pl-1 pr-1  text-right">
         <mat-form-field style="width: 100%; max-width: 100px;">
-          <input matInput type="number" class="text-right" formControlName="amount" (blur)="onAmountLeave(i)" [placeholder] = "i===0 ? 'Amount' : ''"
-            (keyup.enter)="onAmountPressEnter(i)">
+          <input matInput type="number" class="text-right" formControlName="amount" (blur)="onAmountLeave(i)"
+            [placeholder]="i===0 ? 'Amount' : ''" (keyup.enter)="onAmountPressEnter(i)">
           <span matPrefix>$&nbsp;</span>
           <span matSuffix>.00</span>
         </mat-form-field>

@@ -1,36 +1,37 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer 
-      class="sidenav"   
-      fixedInViewport   
-      [ngClass]="{hidden: !(isHandset$ | async) }"
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [ngClass]="{hidden: !(isHandset$ | async) }"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">Link 1</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
+      <ng-template [ngIf]='!authService.isAuthenticated()'>
+        <a mat-list-item routerLink="/signup" (click)="drawer.toggle()">Sign Up</a>
+        <a mat-list-item routerLink="/signin" (click)="drawer.toggle()">Sign In</a>
+      </ng-template>
+
+      <ng-template [ngIf]='authService.isAuthenticated()'>
+          <a mat-list-item routerLink="/" (click)='onLogout(); drawer.toggle()'>Log Out</a>
+      </ng-template>
+
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>walletExpenses</span>
+      <a routerLink="/expense">Expenses</a>
       <span class="spacer"></span>
-      <a href="#" *ngIf="!(isHandset$ | async)">Link 1</a>
-      <a href="#" *ngIf="!(isHandset$ | async)">Link 2</a>
-      <a href="#" *ngIf="!(isHandset$ | async)">Link 3</a>
+      <a routerLink="/expense">{{authService.getUserEmail()}}</a>
+      <ng-template [ngIf]='!authService.isAuthenticated()'>
+        <a routerLink="/signup" *ngIf="!(isHandset$ | async)">Sign Up</a>
+        <a routerLink="/signin" *ngIf="!(isHandset$ | async)">Sign In</a>
+      </ng-template>
+      <a routerLink="/" *ngIf="!(isHandset$ | async) && authService.isAuthenticated()" (click)='onLogout(); drawer.toggle()'>Log Out</a>
     </mat-toolbar>
-<ng-content></ng-content>
+    <ng-content></ng-content>
   </mat-sidenav-content>
 
 </mat-sidenav-container>

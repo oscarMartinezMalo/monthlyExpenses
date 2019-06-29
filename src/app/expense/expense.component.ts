@@ -66,6 +66,7 @@ export class ExpenseComponent implements OnInit {
 
         });
 
+
     // This code if you want to start with one empty
     // this.createExpense('', null);
 

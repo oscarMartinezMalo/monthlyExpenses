@@ -1,0 +1,19 @@
+<mat-card class="container text-center mt-5">
+  <mat-card-content class="row align-items-center">
+    <form class="my-form" (ngSubmit)="onSignUp(f)" #f="ngForm">
+
+      <mat-form-field class="mr-1" style="max-width: 150px;">
+        <mat-label>Email</mat-label>
+        <input matInput id="email" name="email" type="email" ngModel>
+      </mat-form-field>
+
+      <mat-form-field class="mr-1" style="max-width: 150px;">
+        <mat-label>Password</mat-label>
+        <input matInput id="password" name="password" type="password" ngModel >
+      </mat-form-field>
+
+      <button mat-raised-button type="submit" color="primary">Sign Up</button>
+
+    </form>
+  </mat-card-content>
+</mat-card>

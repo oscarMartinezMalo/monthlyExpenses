@@ -6,6 +6,7 @@ import { MonthlyExpense } from './monthly-expense.component';
 
 import { throwError, Subject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 export interface DropDownCategory {
     letter: string;
@@ -58,12 +59,13 @@ export class ExpenseService {
         names: ['Uber, Lyft']
     }];
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private authService: AuthService) { }
 
     getExpense() {
         // return this.personalExp;
+        const token = this.authService.token;
 
-        return this.http.get<PersoneExpense>(this.rootUrl + 'expenses.json')
+        return this.http.get<PersoneExpense>(this.rootUrl + 'expenses.json?auth=' + token)
             .pipe(
                 map(response => {
                     return response;
@@ -89,11 +91,18 @@ export class ExpenseService {
         return this.dropDownCategories.slice();
     }
 
+
     storeExpenses(personeExpense: PersoneExpense) {
-        return this.http.put<PersoneExpense>(this.rootUrl + 'expenses.json', personeExpense);
+
+        const token = this.authService.token;
+        return this.http.put<PersoneExpense>(this.rootUrl + 'expenses.json?auth=' + token, personeExpense);
         // .pipe(
         //   catchError(this.handleError('updateHero', hero))
         // );
+    }
+
+    createUserExpenses(id: string, personeExpense: PersoneExpense){
+
     }
 
     //   updateExpense(index: number, newRecipe: Expenses.month) {
