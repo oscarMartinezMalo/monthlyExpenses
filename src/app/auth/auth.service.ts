@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, EMPTY } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 interface User {
     uid: string;
@@ -26,42 +27,16 @@ export class AuthService {
         private router: Router) {
 
         this.user = this.afAuth.authState.pipe(
-            switchMap(
-                user => {
-                    if (user) {
-                        // user.getIdToken()
-                        //     .then(
-                        //         (token: string) => {
-                        //             this.token = token;
-                        //         }
-                        //     );
-                        return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
-                    } else {
-                        console.log('2');
-                        return EMPTY;
-                    }
-                })
+            switchMap(user => {
+                if (user) {
+                    user.getIdToken().then((token: string) => { this.token = token; });
+                    return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+                } else {
+                    this.token = null;
+                    return of(null);
+                }
+            })
         );
-
-        // afAuth.auth.onAuthStateChanged(firebaseUser => {
-        //     // firebase.auth().onAuthStateChanged(firebaseUser => {
-        //     if (firebaseUser) {
-
-        //         this.userEmail = firebaseUser.email;
-
-        //         firebaseUser.getIdToken()
-        //             .then(
-        //                 (token: string) => {
-        //                     this.token = token;
-        //                 }
-        //             );
-
-        //     } else {
-        //         this.userEmail = null;
-        //         this.token = null;
-        //         console.log('Not logged in');
-        //     }
-        // });
 
     }
 
@@ -73,10 +48,13 @@ export class AuthService {
     oAuthLogin(provider) {
         return this.afAuth.auth.signInWithPopup(provider).
             then((credential) => {
+                console.log('You just Signed ');
+                this.router.navigate(['/expense']);
                 this.updateUserData(credential.user);
             });
     }
 
+    // Update data from Google and emailPass SignIN and SignUP
     updateUserData(user) {
         const userRef: AngularFirestoreDocument<User> = this.afs.doc<User>(`users/${user.uid}`);
 
@@ -89,10 +67,12 @@ export class AuthService {
         return userRef.set(data);
     }
 
+    // SignUP
     emailPasswordSignupUser(email: string, password: string) {
         this.afAuth.auth.createUserWithEmailAndPassword(email, password)
             .then(credential => {
                 console.log('You just Signed ');
+                this.router.navigate(['/expense']);
                 this.updateUserData(credential.user);
             }
             ).catch(
@@ -102,6 +82,7 @@ export class AuthService {
             );
     }
 
+    // LognIn
     emailPasswordSigninUser(email: string, password: string) {
         this.afAuth.auth.signInWithEmailAndPassword(email, password)
             .then(credential => {
@@ -118,8 +99,8 @@ export class AuthService {
 
     logOut() {
         this.afAuth.auth.signOut().then(() => {
-            this.user = EMPTY;
             this.token = null;
+            // this.user =  of(null);
             this.router.navigate(['/signin']);
         }).catch((error) => {
             // An error happened.

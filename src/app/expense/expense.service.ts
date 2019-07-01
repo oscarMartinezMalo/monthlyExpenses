@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { PersoneExpense } from './persone-expense.model';
 import { MonthlyExpense } from './monthly-expense.component';
 
-import { throwError, Subject } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { throwError, Subject, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 
 export interface DropDownCategory {
@@ -65,26 +65,38 @@ export class ExpenseService {
         // return this.personalExp;
         const token = this.authService.token;
 
-        return this.http.get<PersoneExpense>(this.rootUrl + 'expenses.json?auth=' + token)
-            .pipe(
-                map(response => {
-                    return response;
-                }),
-                catchError((errorResponse: HttpErrorResponse) => {
+        return this.authService.user.pipe(
+            switchMap(user => {
+                if (user) {
+                    return this.http.get<PersoneExpense>(this.rootUrl + `expenses/${user.uid}.json?auth=` + token)
+                        .pipe(
+                            map(response => {
+                                return response;
+                            }),
+                            catchError((errorResponse: HttpErrorResponse) => {
 
-                    let errorMessage;
-                    if (errorResponse.error instanceof ErrorEvent) {
-                        // A client-side or network error occurred.
-                        errorMessage = `Error on your browser: ${errorResponse.error.message}`;
+                                let errorMessage;
+                                if (errorResponse.error instanceof ErrorEvent) {
+                                    // A client-side or network error occurred.
+                                    errorMessage = `Error on your browser: ${errorResponse.error.message}`;
 
-                    } else {
-                        // The backend returned an unsuccessful response code.
-                        errorMessage = errorResponse.error.message;
-                    }
+                                } else {
+                                    // The backend returned an unsuccessful response code.
+                                    errorMessage = errorResponse.error.message;
+                                }
 
-                    return throwError(errorMessage);
-                })
-            );
+                                return throwError(errorMessage);
+                            })
+                        );
+                } else {
+                    return of(null);
+                }
+
+            }
+            )
+        );
+
+
     }
 
     getDrownDownCategory() {
@@ -95,15 +107,24 @@ export class ExpenseService {
     storeExpenses(personeExpense: PersoneExpense) {
 
         const token = this.authService.token;
-        return this.http.put<PersoneExpense>(this.rootUrl + 'expenses.json?auth=' + token, personeExpense);
-        // .pipe(
-        //   catchError(this.handleError('updateHero', hero))
-        // );
+        return this.authService.user.pipe(
+            switchMap(user => {
+                // tslint:disable-next-line:max-line-length
+                if (user) {
+                    return this.http.put<PersoneExpense>(this.rootUrl + `expenses/${user.uid}.json?auth=` + token, personeExpense);
+                }  else {
+                    return of(null);
+                }
+            }
+            )
+        );
+
+
     }
 
-    createUserExpenses(id: string, personeExpense: PersoneExpense){
+    // createUserExpenses(id: string, personeExpense: PersoneExpense){
 
-    }
+    // }
 
     //   updateExpense(index: number, newRecipe: Expenses.month) {
     //   }

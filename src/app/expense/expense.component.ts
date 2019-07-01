@@ -49,6 +49,7 @@ export class ExpenseComponent implements OnInit {
     this.expenseService.getExpense().
       subscribe(
         (response) => {
+
           if (response !== null) {
             const personExpenses = response;
 
@@ -76,8 +77,10 @@ export class ExpenseComponent implements OnInit {
 
       this.expenseService.storeExpenses(this.expenseForm.value).
         subscribe(
-          (resp) => {
-            // console.log(resp);
+          (response) => {
+            if (response !== null) {
+              console.log(response);
+            }
           }
         );
     });
