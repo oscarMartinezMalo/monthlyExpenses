@@ -21,18 +21,20 @@ import { SigninComponent } from './auth/signin/signin.component';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth-guard.service';
 
-// import { AngularFireModule } from '@angular/fire';
-// import { AngularFirestoreModule } from '@angular/fire/firestore';
-// import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
 
 // const config = {
 //   apiKey: 'AIzaSyBNr4wf36iiaW6UIOA--6wtE2JEf_b_gEk',
 //   authDomain: 'ng-wallet-expenses.firebaseapp.com',
 //   databaseURL: 'https://ng-wallet-expenses.firebaseio.com',
 //   projectId: 'ng-wallet-expenses',
-  // storageBucket: 'ng-wallet-expenses.appspot.com',
-  // messagingSenderId: '362399682271',
-  // appId: '1:362399682271:web:9523f3410adce10c'
+// storageBucket: 'ng-wallet-expenses.appspot.com',
+// messagingSenderId: '362399682271',
+// appId: '1:362399682271:web:9523f3410adce10c'
 // };
 
 @NgModule({
@@ -62,10 +64,10 @@ import { AuthGuard } from './auth/auth-guard.service';
     MatFormFieldModule,
     HttpClientModule,
     FormsModule,
-    // AngularFireModule.initializeApp(config),
-    // AngularFireModule,
-    // AngularFireAuthModule,
-    // AngularFirestoreModule
+    AngularFireModule.initializeApp(environment.firebase, 'ng-wallet-expenses' ),
+    AngularFirestoreModule, // imports firebase/firestore, only needed for database features
+    AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
+    AngularFireStorageModule // imports firebase/storage only needed for storage features
   ],
   providers: [ExpenseService, AuthService, AuthGuard],
   bootstrap: [AppComponent]
