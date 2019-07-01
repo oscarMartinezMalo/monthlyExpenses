@@ -18,6 +18,8 @@ import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseService } from './expense/expense.service';
 import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
+import { ResetPassComponent } from './auth/reset-pass/reset-pass.component';
+
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth-guard.service';
 
@@ -26,6 +28,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
+
+
+
 
 // const config = {
 //   apiKey: 'AIzaSyBNr4wf36iiaW6UIOA--6wtE2JEf_b_gEk',
@@ -43,7 +48,8 @@ import { environment } from '../environments/environment';
     MyNavComponent,
     ExpenseComponent,
     SignupComponent,
-    SigninComponent
+    SigninComponent,
+    ResetPassComponent
   ],
   imports: [
     BrowserModule,
