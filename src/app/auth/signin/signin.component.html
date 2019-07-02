@@ -12,14 +12,22 @@
     <mat-form-field class="example-full-width">
       <mat-label>Password</mat-label>
       <input matInput id="password" name="password" type="password" ngModel maxlength="25">
+      <mat-icon matSuffix>fingerprint</mat-icon>
     </mat-form-field>
 
     <br>
     <button mat-raised-button type="submit" color="primary">Sign In</button>
     <hr class="button-divider">
     <button mat-raised-button class="google-button" type="button" (click)="onGoogleLogin()" value="Google">
-        <mat-icon>Google</mat-icon>
-        Login with Google
+      <mat-icon>Google</mat-icon>
+      Login with Goolge
     </button>
+
+    <button mat-raised-button class="facebook-button mt-2" type="button" (click)="onFacebookLogin()" value="Facebook">
+      <mat-icon aria-hidden="false" class="icon-facebook" matSuffix>thumb_up_alt</mat-icon>
+      Login with Facebook
+    </button>    
+
   </mat-card>
 </form>
+

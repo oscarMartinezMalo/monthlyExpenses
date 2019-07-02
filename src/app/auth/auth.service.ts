@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -24,7 +25,8 @@ export class AuthService {
     constructor(
         private afAuth: AngularFireAuth,
         private afs: AngularFirestore,
-        private router: Router) {
+        private router: Router,
+        private snackBar: MatSnackBar) {
 
         this.user = this.afAuth.authState.pipe(
             switchMap(user => {
@@ -33,6 +35,7 @@ export class AuthService {
                     return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
                 } else {
                     this.token = null;
+                    this.displayMessaggeSnackBar('Sign In Please', 'X');
                     return of(null);
                 }
             })
@@ -45,10 +48,15 @@ export class AuthService {
         return this.oAuthLogin(provider);
     }
 
+    facebookLogin() {
+        const provider = new firebase.auth.FacebookAuthProvider();
+        return this.oAuthLogin(provider);
+    }
+
     oAuthLogin(provider) {
         return this.afAuth.auth.signInWithPopup(provider).
             then((credential) => {
-                console.log('You just Signed ');
+                this.displayMessaggeSnackBar('You just Signed In', 'X');
                 this.router.navigate(['/expense']);
                 this.updateUserData(credential.user);
             });
@@ -71,13 +79,13 @@ export class AuthService {
     emailPasswordSignupUser(email: string, password: string) {
         this.afAuth.auth.createUserWithEmailAndPassword(email, password)
             .then(credential => {
-                console.log('You just Signed ');
+                this.displayMessaggeSnackBar('You just Signed Up', 'X');
                 this.router.navigate(['/expense']);
                 this.updateUserData(credential.user);
             }
             ).catch(
                 error => {
-                    console.log(error);
+                    this.displayMessaggeSnackBar(error.message, error.code);
                 }
             );
     }
@@ -87,12 +95,12 @@ export class AuthService {
         this.afAuth.auth.signInWithEmailAndPassword(email, password)
             .then(credential => {
                 this.router.navigate(['/expense']);
-                console.log('You just Logged-In');
+                this.displayMessaggeSnackBar('You just logged in', 'X');
                 this.updateUserData(credential.user);
             }
             ).catch(
                 error => {
-                    console.log(error);
+                    this.displayMessaggeSnackBar(error.message, error.code);
                 }
             );
     }
@@ -100,10 +108,15 @@ export class AuthService {
     logOut() {
         this.afAuth.auth.signOut().then(() => {
             this.token = null;
-            // this.user =  of(null);
             this.router.navigate(['/signin']);
         }).catch((error) => {
-            // An error happened.
+            this.displayMessaggeSnackBar(error.message, error.code);
+        });
+    }
+
+    displayMessaggeSnackBar(message: string, code: string) {
+        this.snackBar.open(message, code, {
+            duration: 2000,
         });
     }
 
