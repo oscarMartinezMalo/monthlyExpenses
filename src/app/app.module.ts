@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -68,6 +69,7 @@ import { environment } from '../environments/environment';
     MatInputModule,
     MatGridListModule,
     MatFormFieldModule,
+    MatSnackBarModule,
     HttpClientModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase, 'ng-wallet-expenses' ),

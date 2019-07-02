@@ -78,7 +78,6 @@ body {
   .mat-icon {
     color: var(--main-txt-color);
     cursor:pointer;
-    height: 25px !important;
     margin-top: -10px;
   }
 
@@ -86,4 +85,5 @@ body {
   button.mat-raised-button, input.mat-raised-button{
     color: var(--main-txt-color);
     background: var(--main-bg-color-light) !important;
+    width: 200px;
   }
