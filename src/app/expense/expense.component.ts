@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { startWith, map, switchMap, take } from 'rxjs/operators';
 import { ExpenseService, DropDownCategory } from './expense.service';
 import { PersoneExpense } from './persone-expense.model';
 
@@ -18,11 +18,14 @@ export const _filter = (opt: string[], value: string): string[] => {
   templateUrl: './expense.component.html',
   styleUrls: ['./expense.component.scss']
 })
-export class ExpenseComponent implements OnInit {
+export class ExpenseComponent implements OnInit, OnDestroy {
   @ViewChild('scrollMe', { static: true }) myScrollContainer: ElementRef;
 
   // Reactive form
   expenseForm: FormGroup;
+  formChange: Subscription;
+
+
   totalExpended = 0;
   totalSave = 0;
 
@@ -46,25 +49,22 @@ export class ExpenseComponent implements OnInit {
       expenses: expensesArray
     });
 
+
     this.expenseService.getExpense().
       subscribe(
         (response) => {
-
           if (response !== null) {
-            const personExpenses = response;
-
-            if (personExpenses.income !== null) {
-              this.expenseForm.controls.income.setValue(personExpenses.income);
+            if (response.income !== null) {
+              this.expenseForm.controls.income.setValue(response.income);
             }
 
-            if (personExpenses.expenses != null) {
+            if (response.expenses !== null && response.expenses !== undefined) {
               // Load the expenses comming from the service
-              for (const monthlyExpense of personExpenses.expenses) {
+              for (const monthlyExpense of response.expenses) {
                 this.createExpense(monthlyExpense.type, monthlyExpense.amount);
               }
             }
           }
-
         });
 
 
@@ -72,18 +72,28 @@ export class ExpenseComponent implements OnInit {
     // this.createExpense('', null);
 
     // Calculate the Expended and Saved when a change is detected
-    this.expenseForm.valueChanges.subscribe(() => {
-      this.calculateTotalExpenses();
+    this.formChange = this.expenseForm.valueChanges.subscribe(() => {
 
-      this.expenseService.storeExpenses(this.expenseForm.value).
-        subscribe(
-          (response) => {
+      if (this.expenseForm.dirty) {
+        // Recalculate the expenses to show in the screen
+        this.calculateTotalExpenses();
+
+        // take(1) operator which is great because it automatically unsubscribes after the first execution
+        this.expenseService.storeExpenses(this.expenseForm.value).pipe(take(1))
+          .subscribe((response) => {
             if (response !== null) {
-              console.log(response);
+              // CHanges were made
             }
-          }
-        );
+          });
+      }
+
     });
+
+  }
+
+  ngOnDestroy(): void {
+    // Destroy the form subscribtion after they leave the view
+    this.formChange.unsubscribe();
 
   }
 
