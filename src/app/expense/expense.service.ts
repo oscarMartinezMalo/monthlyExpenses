@@ -112,13 +112,12 @@ export class ExpenseService {
                 // tslint:disable-next-line:max-line-length
                 if (user) {
                     return this.http.put<PersoneExpense>(this.rootUrl + `expenses/${user.uid}.json?auth=` + token, personeExpense);
-                }  else {
+                } else {
                     return of(null);
                 }
             }
             )
         );
-
 
     }
 

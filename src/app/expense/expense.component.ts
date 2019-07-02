@@ -49,7 +49,7 @@ export class ExpenseComponent implements OnInit {
     this.expenseService.getExpense().
       subscribe(
         (response) => {
-
+          console.log(response);
           if (response !== null) {
             const personExpenses = response;
 
@@ -57,7 +57,7 @@ export class ExpenseComponent implements OnInit {
               this.expenseForm.controls.income.setValue(personExpenses.income);
             }
 
-            if (personExpenses.expenses != null) {
+            if (personExpenses.expenses !== null) {
               // Load the expenses comming from the service
               for (const monthlyExpense of personExpenses.expenses) {
                 this.createExpense(monthlyExpense.type, monthlyExpense.amount);
@@ -72,18 +72,18 @@ export class ExpenseComponent implements OnInit {
     // this.createExpense('', null);
 
     // Calculate the Expended and Saved when a change is detected
-    this.expenseForm.valueChanges.subscribe(() => {
-      this.calculateTotalExpenses();
+    // this.expenseForm.valueChanges.subscribe(() => {
+    //   this.calculateTotalExpenses();
 
-      this.expenseService.storeExpenses(this.expenseForm.value).
-        subscribe(
-          (response) => {
-            if (response !== null) {
-              console.log(response);
-            }
-          }
-        );
-    });
+    //   this.expenseService.storeExpenses(this.expenseForm.value).
+    //     subscribe(
+    //       (response) => {
+    //         if (response !== null) {
+    //           // console.log(response);
+    //         }
+    //       }
+    //     );
+    // });
 
   }
 
