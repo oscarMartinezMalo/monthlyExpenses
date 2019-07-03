@@ -23,8 +23,6 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   // Reactive form
   expenseForm: FormGroup;
   formChange: Subscription;
-
-
   totalExpended = 0;
   totalSave = 0;
 
@@ -35,10 +33,6 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   constructor(private expenseService: ExpenseService) { }
 
   ngOnInit() {
-    this.initForm();
-  }
-
-  private initForm() {
     const expensesArray = new FormArray([]);
     const monthlyIncome = 0;
 
@@ -48,8 +42,18 @@ export class ExpenseComponent implements OnInit, OnDestroy {
       expenses: expensesArray
     });
 
+    // Load the data on the View
+    this.initialDataLoad();
 
-    this.expenseService.getExpense().
+    // This code if you want to start with one empty
+    // this.createExpense('', null);
+
+    // Calculate the Expended and Saved when a change is detected
+    this.calculateSaveOnChange();
+  }
+
+  initialDataLoad() {
+    this.expenseService.getExpense().pipe(take(1)).
       subscribe(
         (response) => {
           if (response !== null) {
@@ -62,14 +66,13 @@ export class ExpenseComponent implements OnInit, OnDestroy {
               for (const monthlyExpense of response.expenses) {
                 this.createExpense(monthlyExpense.type, monthlyExpense.amount);
               }
+
             }
           }
         });
+  }
 
-
-    // This code if you want to start with one empty
-    // this.createExpense('', null);
-
+  calculateSaveOnChange() {
     // Calculate the Expended and Saved when a change is detected
     this.formChange = this.expenseForm.valueChanges.subscribe(() => {
 
@@ -83,16 +86,20 @@ export class ExpenseComponent implements OnInit, OnDestroy {
             if (response !== null) {
               // CHanges were made
             }
-          });
+          },
+            err => console.error('Observer got an error: ' + err),
+            () => {
+              // After is inserted or removed any value is gonna scroll to the bottom
+              this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+            });
       }
 
     });
-
   }
 
   ngOnDestroy(): void {
-    // Destroy the form subscribtion after they leave the view
-    this.formChange.unsubscribe();
+    // Destroy the form subscribtion after they leave the view if you not use
+    // this.formChange.unsubscribe();
 
   }
 
@@ -107,7 +114,19 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   }
 
   onDeleteExpense(index: number) {
+
+    // take(1) operator which is great because it automatically unsubscribes after the first execution
     (this.expenseForm.get('expenses') as FormArray).removeAt(index);
+    this.expenseService.deleteExpense(this.expenseForm.value).pipe(take(1))
+      .subscribe((response) => {
+        if (response !== null) {
+          // Delete the row from the UI          
+        }
+      }, error => {
+        console.log('Refresh the page something when wrong');
+      });
+
+    // });
   }
 
   onAddExpense() {

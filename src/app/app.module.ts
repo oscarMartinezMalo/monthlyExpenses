@@ -29,19 +29,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
-
-
-
-
-// const config = {
-//   apiKey: 'AIzaSyBNr4wf36iiaW6UIOA--6wtE2JEf_b_gEk',
-//   authDomain: 'ng-wallet-expenses.firebaseapp.com',
-//   databaseURL: 'https://ng-wallet-expenses.firebaseio.com',
-//   projectId: 'ng-wallet-expenses',
-// storageBucket: 'ng-wallet-expenses.appspot.com',
-// messagingSenderId: '362399682271',
-// appId: '1:362399682271:web:9523f3410adce10c'
-// };
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 @NgModule({
   declarations: [
@@ -75,7 +63,8 @@ import { environment } from '../environments/environment';
     AngularFireModule.initializeApp(environment.firebase, 'ng-wallet-expenses' ),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
-    AngularFireStorageModule // imports firebase/storage only needed for storage features
+    AngularFireStorageModule, // imports firebase/storage only needed for storage features
+    AngularFireDatabaseModule
   ],
   providers: [ExpenseService, AuthService, AuthGuard],
   bootstrap: [AppComponent]

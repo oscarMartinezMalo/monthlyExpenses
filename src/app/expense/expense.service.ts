@@ -1,12 +1,13 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { PersoneExpense } from './persone-expense.model';
-import { MonthlyExpense } from './monthly-expense.component';
 
 import { throwError, Subject, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { Observable, EMPTY } from 'rxjs';
 
 export interface DropDownCategory {
     letter: string;
@@ -59,16 +60,29 @@ export class ExpenseService {
         names: ['Uber, Lyft']
     }];
 
-    constructor(private http: HttpClient, private authService: AuthService) { }
+    items: Observable<any[]>;
+
+    constructor(
+        private http: HttpClient,
+        private authService: AuthService,
+        private db: AngularFireDatabase
+    ) {
+        // Use this for realtime data base
+        // console.log('dd');
+        // this.items = db.list('/userExpenses').valueChanges();
+        // this.items.subscribe(resp => {
+        //     console.log(resp);
+        // });
+    }
 
     getExpense() {
-        // return this.personalExp;
+
         const token = this.authService.token;
 
         return this.authService.user.pipe(
             switchMap(user => {
                 if (user) {
-                    return this.http.get<PersoneExpense>(this.rootUrl + `expenses/${user.uid}.json?auth=` + token)
+                    return this.http.get<PersoneExpense>(this.rootUrl + `userExpenses/${user.uid}.json?auth=` + token)
                         .pipe(
                             map(response => {
                                 return response;
@@ -111,7 +125,7 @@ export class ExpenseService {
             switchMap(user => {
                 // tslint:disable-next-line:max-line-length
                 if (user) {
-                    return this.http.put<PersoneExpense>(this.rootUrl + `expenses/${user.uid}.json?auth=` + token, personeExpense);
+                    return this.http.put<PersoneExpense>(this.rootUrl + `userExpenses/${user.uid}.json?auth=` + token, personeExpense);
                 } else {
                     return of(null);
                 }
@@ -121,13 +135,20 @@ export class ExpenseService {
 
     }
 
-    // createUserExpenses(id: string, personeExpense: PersoneExpense){
+    deleteExpense(personeExpense: PersoneExpense) {
+        // This should delete only the row affected but since the row dont have and ID the user data is all updated
+        // return this.http.delete(this.rootUrl + `expenses/${user.uid}/expenses/${expenseRow}.json?auth=` + token);
+        console.log(personeExpense);
+        const token = this.authService.token;
+        return this.authService.user.pipe(
+            switchMap(user => {
+                if (user) {
+                    return this.http.put<PersoneExpense>(this.rootUrl + `userExpenses/${user.uid}.json?auth=` + token, personeExpense);
+                } else {
+                    return of(null);
+                }
+            })
+        );
+    }
 
-    // }
-
-    //   updateExpense(index: number, newRecipe: Expenses.month) {
-    //   }
-
-    //   deleteExpense(index: number) {
-    //   }
 }

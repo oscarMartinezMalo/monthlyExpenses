@@ -13,8 +13,11 @@
     </div>
   </div>
 
+<!-- 
   <div #scrollMe formArrayName="expenses" class="ngFor-container mt-4"
-    style="overflow-y: scroll; background-color: gainsboro;" [scrollTop]="scrollMe.scrollHeight">
+    style="overflow-y: scroll; background-color: gainsboro;" [scrollTop]="scrollMe.scrollHeight"> -->
+
+    <div  #scrollMe formArrayName="expenses" class="ngFor-container mt-4" style="overflow-y: scroll; background-color: gainsboro;">
 
     <div class="row" style="margin: auto;"
       *ngFor="let expenseCtrl of expenseForm.get('expenses').controls; let i = index" [formGroupName]="i"
