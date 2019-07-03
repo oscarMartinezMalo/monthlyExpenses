@@ -16,18 +16,25 @@
     </mat-form-field>
 
     <br>
-    <button mat-raised-button type="submit" color="primary">Sign In</button>
-    <hr class="button-divider">
-    <button mat-raised-button class="google-button" type="button" (click)="onGoogleLogin()" value="Google">
-      <mat-icon>Google</mat-icon>
-      Login with Goolge
+
+    <button mat-raised-button type="submit" color="primary">
+      <span matPrefix  style="margin-right:100px;">Sign In</span>
+      <mat-icon>mail_outline</mat-icon>
     </button>
 
-    <button mat-raised-button class="facebook-button mt-2" type="button" (click)="onFacebookLogin()" value="Facebook">
-      <mat-icon aria-hidden="false" class="icon-facebook" matSuffix>thumb_up_alt</mat-icon>
-      Login with Facebook
-    </button>    
+    <hr class="button-divider">
+    <button mat-raised-button class="google-button" type="button" (click)="onGoogleLogin()" value="Google"
+      style="text-align: left;">
+      <span matPrefix  style="margin-right: 35px;">Login with Google</span>
+      <mat-icon class="icon-google">Google</mat-icon>
+      
+    </button>
+
+    <button mat-raised-button class="facebook-button mt-2" type="button" (click)="onFacebookLogin()" value="Facebook"
+      style="text-align: left;">
+      <span matPrefix class="mr-3">Login with Facebook</span>
+      <mat-icon aria-hidden="false" class="icon-facebook" matSuffix>thumb_up_alt</mat-icon>      
+    </button>
 
   </mat-card>
 </form>
-

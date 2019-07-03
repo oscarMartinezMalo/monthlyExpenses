@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@ang
 import { Observable, Subscription } from 'rxjs';
 import { startWith, map, switchMap, take } from 'rxjs/operators';
 import { ExpenseService, DropDownCategory } from './expense.service';
-import { PersoneExpense } from './persone-expense.model';
 
 // tslint:disable-next-line:variable-name
 export const _filter = (opt: string[], value: string): string[] => {
@@ -53,20 +52,12 @@ export class ExpenseComponent implements OnInit, OnDestroy {
     this.expenseService.getExpense().
       subscribe(
         (response) => {
-<<<<<<< HEAD
-          console.log(response);
-=======
->>>>>>> d23bccc00f032e93bc8cde362555a472f17e802a
           if (response !== null) {
             if (response.income !== null) {
               this.expenseForm.controls.income.setValue(response.income);
             }
 
-<<<<<<< HEAD
-            if (personExpenses.expenses !== null) {
-=======
             if (response.expenses !== null && response.expenses !== undefined) {
->>>>>>> d23bccc00f032e93bc8cde362555a472f17e802a
               // Load the expenses comming from the service
               for (const monthlyExpense of response.expenses) {
                 this.createExpense(monthlyExpense.type, monthlyExpense.amount);
@@ -80,20 +71,6 @@ export class ExpenseComponent implements OnInit, OnDestroy {
     // this.createExpense('', null);
 
     // Calculate the Expended and Saved when a change is detected
-<<<<<<< HEAD
-    // this.expenseForm.valueChanges.subscribe(() => {
-    //   this.calculateTotalExpenses();
-
-    //   this.expenseService.storeExpenses(this.expenseForm.value).
-    //     subscribe(
-    //       (response) => {
-    //         if (response !== null) {
-    //           // console.log(response);
-    //         }
-    //       }
-    //     );
-    // });
-=======
     this.formChange = this.expenseForm.valueChanges.subscribe(() => {
 
       if (this.expenseForm.dirty) {
@@ -110,7 +87,6 @@ export class ExpenseComponent implements OnInit, OnDestroy {
       }
 
     });
->>>>>>> d23bccc00f032e93bc8cde362555a472f17e802a
 
   }
 

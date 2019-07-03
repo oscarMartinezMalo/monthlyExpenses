@@ -27,8 +27,8 @@
       <a routerLink="/expense">Expenses</a>
       <span class="spacer"></span>
       <!-- <a routerLink="/expense">{{authService.getUserEmail()}}</a> -->
-      <a *ngIf='authService.user | async as user'>{{user.email}}</a>
-
+      <a class="user-email-style" *ngIf='authService.user | async as user'>{{user.email}}</a>
+      <span class="spacer"></span>
       <!-- <ng-template [ngIf]='!authService.isAuthenticated()'> -->
         <ng-template [ngIf]='!(authService.user | async)'>
         <a routerLink="/signup" *ngIf="!(isHandset$ | async)">Sign Up</a>
