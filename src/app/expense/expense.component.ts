@@ -120,7 +120,7 @@ export class ExpenseComponent implements OnInit, OnDestroy {
     this.expenseService.deleteExpense(this.expenseForm.value).pipe(take(1))
       .subscribe((response) => {
         if (response !== null) {
-          // Delete the row from the UI          
+          // Delete the row from the UI
         }
       }, error => {
         console.log('Refresh the page something when wrong');
