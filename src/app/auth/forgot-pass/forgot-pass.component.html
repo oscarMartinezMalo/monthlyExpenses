@@ -1,0 +1,18 @@
+<form [formGroup]="formForgotPass" (ngSubmit)="sendEmail()" class="example-form card-style">
+  <p class="card-description">Reset Password</p>
+  <hr>
+  <mat-card class="example-card">
+    <mat-form-field class="example-full-width">
+      <input [ngClass]="{'error': isValid('email')}" type="email" matInput placeholder="Email" formControlName="email"
+        maxlength="50">
+      <mat-error
+        *ngIf="formForgotPass.hasError('required', 'email') || formForgotPass.hasError('invalidEmail', 'email')">
+        Invalid Email</mat-error>
+    </mat-form-field>
+
+    <br>
+
+    <button mat-raised-button>Send Email</button>
+  </mat-card>
+
+</form>

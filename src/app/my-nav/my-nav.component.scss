@@ -7,8 +7,7 @@
 }
 
 .sidenav .mat-toolbar {
-  // background: inherit;
-  background-color: #a5303b !important
+  background-color: var( --main-bg-color );
 }
 
 .user-email-style{
@@ -20,7 +19,7 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: #a5303b !important;
+  background-color: var( --main-bg-color );
   font-size: 14px;
 }
 
@@ -31,13 +30,18 @@
 .mat-toolbar a {
   display: inline-block;
   margin: 0 10px;
-  color: white;
+  color: var(--main-txt-color);
   text-decoration: none;
 }
 
 .hidden{
   display: none;
 }
+
+a.active {
+  text-decoration: underline !important;
+}
+
 // @media (min-width: 600px){
 //   .sidenav {
 //     display: none;

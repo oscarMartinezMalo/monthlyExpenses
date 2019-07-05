@@ -1,10 +1,14 @@
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 :root {
-    --main-bg-color: #880e4f;
-    --main-bg-color-light: #bc477b;
-    --main-bg-color-dark: #560027;
+    --main-bg-color: #579767;
+    --main-bg-color-light: #67b97a;
+    --main-bg-color-superlight: #d9f9e1; 
     --secondary-bg-color:white ;
     --main-txt-color: white; 
     --secondary-txt-color: black; 
+    --danger-color: #a22a35;
   }
 
 @mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white, 50%)) {
@@ -28,7 +32,7 @@
     }
   }
 
-  @include scrollbars(.5em, #6f4045 );
+  @include scrollbars(.5em, #7ddb94 );
 /* You can add global styles to this file, and also import other style files */
 // html, body { height: 100%; }
 body, html{
@@ -37,26 +41,30 @@ body, html{
 
 body { 
     margin: 0;
-    // margin-bottom: 64px; // size of the footer height
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.bg-dark{
-    background-color: #6f4045 !important
-}
-
-
 
 .card-style,.two-form{
-    margin-top: 5%;;
+    margin-top: 2%;;
     padding: 20px;
     position:relative;
     left:50%;
     transform: translate(-50%, 0);
     max-width: 340px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
-    background-color: var( --main-bg-color );
+    box-shadow: 0 8px 16px 0 gray;
+    background-color: var( --main-bg-color-light );
     text-align: center;
+
+    p {
+      color: var(--main-txt-color );
+    }
+  }
+
+  button.mat-raised-button, input.mat-raised-button{
+    color: var(--main-txt-color);
+    background-color: var(--main-bg-color-light) !important;
+    width: 200px;
   }
 
   .example-full-width {
@@ -65,7 +73,7 @@ body {
 
   .mat-button-custom.active:hover {
     color: var(--secondary-txt-color);
-    background: var(--main-bg-color-dark);
+    background-color: var(--main-bg-color);
   }
   
 
@@ -75,15 +83,16 @@ body {
     background-color: var( --main-txt-color ) !important;
   }
 
-  .mat-icon {
-    color: var(--main-txt-color);
-    cursor:pointer;
+  mat-form-field .mat-icon {
+    color: var(--main-bg-color);
+    cursor: pointer;
     margin-top: auto;
   }
 
-
-  button.mat-raised-button, input.mat-raised-button{
-    color: var(--main-txt-color);
-    background: var(--main-bg-color-light) !important;
-    width: 200px;
+  .mat-snack-bar-container {
+    background-color: var( --danger-color );
+    span{
+      color: var( --main-txt-color );
+    }
   }
+

@@ -7,7 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,7 +19,6 @@ import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseService } from './expense/expense.service';
 import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
-import { ResetPassComponent } from './auth/reset-pass/reset-pass.component';
 
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth-guard.service';
@@ -31,6 +30,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { UpdateUserComponent } from './auth/update-user/update-user.component';
+import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
 
 @NgModule({
   declarations: [
@@ -39,8 +39,8 @@ import { UpdateUserComponent } from './auth/update-user/update-user.component';
     ExpenseComponent,
     SignupComponent,
     SigninComponent,
-    ResetPassComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
+    ForgotPassComponent
   ],
   imports: [
     BrowserModule,

@@ -6,8 +6,8 @@
     <mat-nav-list>
       <!-- <ng-template [ngIf]='!authService.isAuthenticated()'> -->
         <ng-template [ngIf]='!(authService.user | async)'>
-        <a mat-list-item routerLink="/signup" (click)="drawer.toggle()">Sign Up</a>
-        <a mat-list-item routerLink="/signin" (click)="drawer.toggle()">Sign In</a>
+        <a mat-list-item routerLink="/signup" routerLinkActive="active" (click)="drawer.toggle()">Sign Up</a>
+        <a mat-list-item routerLink="/signin" routerLinkActive="active" (click)="drawer.toggle()">Sign In</a>
       </ng-template>
 
       <!-- <ng-template [ngIf]='authService.isAuthenticated()'> -->
@@ -31,8 +31,8 @@
       <span class="spacer"></span>
       <!-- <ng-template [ngIf]='!authService.isAuthenticated()'> -->
         <ng-template [ngIf]='!(authService.user | async)'>
-        <a routerLink="/signup" *ngIf="!(isHandset$ | async)">Sign Up</a>
-        <a routerLink="/signin" *ngIf="!(isHandset$ | async)">Sign In</a>
+        <a routerLink="/signup" routerLinkActive="active" *ngIf="!(isHandset$ | async)">Sign Up</a>
+        <a routerLink="/signin" routerLinkActive="active" *ngIf="!(isHandset$ | async)">Sign In</a>
       </ng-template>
       <!-- <a routerLink="/" *ngIf="!(isHandset$ | async) && authService.isAuthenticated()" (click)='onLogout(); drawer.toggle()'>Log Out</a> -->
       <a routerLink="/" *ngIf="!(isHandset$ | async) && (authService.user | async)" (click)='onLogout(); drawer.toggle()'>Log Out</a>

@@ -3,7 +3,7 @@ button{
 }
 
 .odd{
-    background-color:darkgray;
+    background-color: var(--main-bg-color-superlight);
 }
 
 .ngFor-container{
@@ -16,6 +16,19 @@ button{
     padding-top: 12px;
 }
 
+.bg-dark{
+    background-color: var(--main-bg-color-light) !important;
+    color:  var(--main-txt-color) !important;
+}
 
 
+.btn-red {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color:   var(--main-txt-color);
+}
 
+.btn-delete {
+    font-weight: bold;
+    font-size: .5rem;
+}

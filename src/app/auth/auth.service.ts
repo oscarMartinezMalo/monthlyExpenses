@@ -77,32 +77,52 @@ export class AuthService {
 
     // SignUP
     emailPasswordSignupUser(email: string, password: string) {
+
         this.afAuth.auth.createUserWithEmailAndPassword(email, password)
             .then(credential => {
                 this.displayMessaggeSnackBar('You just Signed Up', 'X');
-                this.router.navigate(['/expense']);
-                this.updateUserData(credential.user);
-            }
-            ).catch(
+                // this.router.navigate(['/expense']);
+                // this.updateUserData(credential.user);
+
+                // Verfication email
+                this.sendVerificationEmail();
+            }).catch(
                 error => {
                     this.displayMessaggeSnackBar(error.message, error.code);
                 }
             );
     }
 
+    sendVerificationEmail() {
+        const user = this.afAuth.auth.currentUser;
+        user.sendEmailVerification().then(() => {
+            this.displayMessaggeSnackBar('Please confirm account, an Email was sent to you', 'X');
+        }).catch((error) => {
+            this.displayMessaggeSnackBar(error.message, 'X');
+        });
+    }
+
     // LognIn
     emailPasswordSigninUser(email: string, password: string) {
+
         this.afAuth.auth.signInWithEmailAndPassword(email, password)
             .then(credential => {
-                this.router.navigate(['/expense']);
-                this.displayMessaggeSnackBar('You just logged in', 'X');
-                this.updateUserData(credential.user);
+                // Email verification
+                if (credential.user.emailVerified) {
+                    this.router.navigate(['/expense']);
+                    this.displayMessaggeSnackBar('You just logged in', 'X');
+                    this.updateUserData(credential.user);
+                } else {
+                    this.displayMessaggeSnackBar('Please validate your email address. Check your inbox', 'X');
+                }
             }
             ).catch(
                 error => {
                     this.displayMessaggeSnackBar(error.message, error.code);
                 }
             );
+
+
     }
 
     logOut() {
@@ -114,10 +134,23 @@ export class AuthService {
         });
     }
 
-    displayMessaggeSnackBar(message: string, code: string) {
-        this.snackBar.open(message, code, {
-            duration: 2000,
+    sendResetEmail(emailAddress: string) {
+
+        this.afAuth.auth.sendPasswordResetEmail(emailAddress).then(() => {
+            this.displayMessaggeSnackBar('An email was sent to you', 'X');
+            this.router.navigate(['/signin']);
+        }).catch((error) => {
+            this.displayMessaggeSnackBar(error.message, 'X');
         });
     }
+
+    displayMessaggeSnackBar(message: string, code: string) {
+        this.snackBar.open(message, code, {
+            duration: 3000,
+        });
+    }
+
+
+
 
 }

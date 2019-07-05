@@ -1,28 +1,18 @@
 <form [formGroup]="expenseForm" class="container">
-<!-- <form [formGroup]="getExpenseForm()" class="container"> -->
 
-  <div class="row bg-dark justify-content-center pt-2">
-    
-    <!-- <div class="col-4 offset-4 offset-sm-9">       -->
+  <div class="row justify-content-center pt-2 bg-dark">   
     <div class="col-6">
       <mat-form-field class="m-0" style="max-width: 100px;">
-        <input style="color: white;" matInput type="number" placeholder="Income" class="text-right"
+        <input matInput type="number" placeholder="Income" class="income text-right"
           formControlName="income" (input)=calculateTotalExpenses()>
-        <span style="color: white;" matPrefix>$&nbsp;</span>
-        <span style="color: white;" matSuffix>.00</span>
+        <span matPrefix>$&nbsp;</span>
+        <span matSuffix>.00</span>
       </mat-form-field>
     </div>
   </div>
 
-  <!-- 
-  <div #scrollMe formArrayName="expenses" class="ngFor-container mt-4"
-    style="overflow-y: scroll; background-color: gainsboro;" [scrollTop]="scrollMe.scrollHeight"> -->
+    <div  #scrollMe formArrayName="expenses" class="ngFor-container mt-4" style="overflow-y: scroll;">
 
-    <div  #scrollMe formArrayName="expenses" class="ngFor-container mt-4" style="overflow-y: scroll; background-color: gainsboro;">
-
-    <!-- <div class="row" style="margin: auto;"
-      *ngFor="let expenseCtrl of expenseForm.get('expenses').controls; let i = index" [formGroupName]="i"
-      [ngClass]="{odd: i%2 === 0, padding: i ===0}"> -->
       <div class="row" style="margin: auto;" *ngFor="let expenseCtrl of getExpenseForm().controls; let i = index"
         [formGroupName]="i" [ngClass]="{odd: i%2 === 0, padding: i ===0}">
       
@@ -50,7 +40,7 @@
       </div>
 
       <div class="col-2  align-self-center text-right">
-        <button type="button" class="btn btn-danger btn-sm" (click)="onDeleteExpense(i)">X</button>
+        <button type="button" class="btn btn-red btn-delete btn-sm" (click)="onDeleteExpense(i)">-</button>
       </div>
 
     </div>
@@ -58,7 +48,7 @@
 
 </form>
 
-<nav class="navbar fixed-bottom navbar-light bg-dark">
+<nav class="navbar fixed-bottom  bg-dark">
 
   <div class="row w-100">
     <!-- <div class="col-5  text-center">
@@ -66,7 +56,7 @@
         (click)="onAddExpense()">+</button>
     </div> -->
     <div class="col-5  text-center">
-      <button type="button" class="btn btn-danger btn-lg add-button" [disabled]="!getExpenseForm().valid"
+      <button type="button" class="btn btn-red btn-lg add-button" [disabled]="!getExpenseForm().valid"
         (click)="onAddExpense()">+</button>
     </div>
 

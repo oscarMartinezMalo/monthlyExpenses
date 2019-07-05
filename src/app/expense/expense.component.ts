@@ -76,6 +76,9 @@ export class ExpenseComponent implements OnInit, OnDestroy {
 
             }
           }
+          
+          this.calculateTotalExpenses();
+
         });
   }
 
