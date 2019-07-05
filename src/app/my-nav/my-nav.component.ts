@@ -17,7 +17,7 @@ export class MyNavComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver,
-              private authService: AuthService) {}
+              public authService: AuthService) {}
 
               onLogout() {
                 this.authService.logOut();

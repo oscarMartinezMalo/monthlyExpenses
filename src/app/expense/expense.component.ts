@@ -22,6 +22,9 @@ export class ExpenseComponent implements OnInit, OnDestroy {
 
   // Reactive form
   expenseForm: FormGroup;
+
+  // get getExpenseForm { return this.expenseForm.get('Data'); }
+
   formChange: Subscription;
   totalExpended = 0;
   totalSave = 0;
@@ -29,6 +32,8 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   // Load the dropdown Data
   expenseCategories = this.expenseService.getDrownDownCategory();
   expenseGroupOptions: Observable<DropDownCategory[]>;
+
+  getExpenseForm() { return (this.expenseForm.get('expenses') as FormArray); }
 
   constructor(private expenseService: ExpenseService) { }
 
@@ -41,6 +46,8 @@ export class ExpenseComponent implements OnInit, OnDestroy {
       income: new FormControl(monthlyIncome, [Validators.pattern(/^[1-9]+[0-9]*$/)]),
       expenses: expensesArray
     });
+
+
 
     // Load the data on the View
     this.initialDataLoad();
