@@ -35,7 +35,7 @@ export class AuthService {
                     return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
                 } else {
                     this.token = null;
-                    this.displayMessaggeSnackBar('Sign In Please', 'X');
+                    // this.displayMessaggeSnackBar('Sign In Please', 'X');
                     return of(null);
                 }
             })
@@ -121,8 +121,6 @@ export class AuthService {
                     this.displayMessaggeSnackBar(error.message, error.code);
                 }
             );
-
-
     }
 
     logOut() {

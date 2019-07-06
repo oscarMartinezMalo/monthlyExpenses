@@ -1,0 +1,70 @@
+.jumbotron { 
+  background-image: url("../../assets/images/heroimage.jpg");
+  color: var( --main-txt-color );;
+  border-radius: 0px;
+  
+  height: 100%;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;  
+  position: relative;
+  margin-bottom: 0px;
+  padding: 0px;
+  top: -64;
+
+  max-height: -webkit-calc(100vh - 64px);
+  max-height:    -moz-calc(100vh - 64px);
+  max-height:         calc(100vh - 64px);
+}
+
+.hero-text {
+  text-align: center;
+  position: absolute;
+  
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var( --main-txt-color );
+}
+
+p{
+  color: var( --main-bg-color-dark );
+  font-style: italic;
+  font-size: 1rem;
+}
+
+ .mat-stroked-button{
+  border-color: var( --main-bg-color );
+  color: var( --main-bg-color );
+  border-radius: 20px;
+}
+
+.mat-stroked-button:hover{
+  background-color: var( --main-bg-color );
+  color: var( --secondary-bg-color );
+}
+
+h1::first-line {
+  color: var( --main-bg-color );
+}
+
+@media only screen and (max-width: 600px) {
+  .jumbotron { 
+    // background-position: left;
+    max-height: -webkit-calc(100vh - 56px);
+    max-height:    -moz-calc(100vh - 56px);
+    max-height:         calc(100vh - 56px);
+  }
+  .hero-text {  
+    top: 70%;
+  }  
+  .mat-stroked-button{
+    background-color: var( --main-bg-color );
+    color: var( --secondary-bg-color );
+  }
+
+  h1, p{
+    color:  var( --main-bg-color );
+  }
+}

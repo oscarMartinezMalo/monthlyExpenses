@@ -31,6 +31,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { UpdateUserComponent } from './auth/update-user/update-user.component';
 import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
+import { HomeComponent } from './home/home.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
     SignupComponent,
     SigninComponent,
     UpdateUserComponent,
-    ForgotPassComponent
+    ForgotPassComponent,
+    HomeComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
