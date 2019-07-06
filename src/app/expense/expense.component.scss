@@ -1,6 +1,6 @@
-button{
-    border-radius: 50%;
-}
+// button{
+//     border-radius: 50%;
+// }
 
 .odd{
     background-color: var(--main-bg-color-superlight);
@@ -21,14 +21,19 @@ button{
     color:  var(--main-txt-color) !important;
 }
 
-
-.btn-red {
-    background-color: var(--danger-color);
-    border-color: var(--danger-color);
-    color:   var(--main-txt-color);
+.material-icons.icon-plus{
+    font-size: 44px;
 }
 
-.btn-delete {
-    font-weight: bold;
-    font-size: .5rem;
+// .btn-red {
+//     background-color: var(--danger-color);
+//     border-color: var(--danger-color);
+//     color:   var(--main-txt-color);
+// }
+
+.btn-add {
+    width: 55px !important;
+    height:  55px !important;
+    padding: 0px;
+    margin:0px;
 }

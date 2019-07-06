@@ -10,15 +10,17 @@ import { AuthService } from '../auth.service';
 })
 export class SignupComponent implements OnInit {
 
-  constructor( private authService: AuthService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
 
   onSignUp(form: NgForm) {
-    const email = form.value.email;
-    const password = form.value.password;
-    this.authService.emailPasswordSignupUser(email, password);
+    if (form.valid) {
+      const email = form.value.email;
+      const password = form.value.password;
+      this.authService.emailPasswordSignupUser(email, password);
+    }
   }
 
 }

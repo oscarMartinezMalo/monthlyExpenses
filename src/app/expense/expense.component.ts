@@ -28,6 +28,7 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   formChange: Subscription;
   totalExpended = 0;
   totalSave = 0;
+  monthlyIncome;
 
   // Load the dropdown Data
   expenseCategories = this.expenseService.getDrownDownCategory();
@@ -39,11 +40,10 @@ export class ExpenseComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const expensesArray = new FormArray([]);
-    const monthlyIncome = 0;
 
     // Create the formGroup that is linked with the html form
     this.expenseForm = new FormGroup({
-      income: new FormControl(monthlyIncome, [Validators.pattern(/^[1-9]+[0-9]*$/)]),
+      income: new FormControl(this.monthlyIncome, [Validators.pattern(/^[1-9]+[0-9]*$/)]),
       expenses: expensesArray
     });
 
@@ -73,10 +73,9 @@ export class ExpenseComponent implements OnInit, OnDestroy {
               for (const monthlyExpense of response.expenses) {
                 this.createExpense(monthlyExpense.type, monthlyExpense.amount);
               }
-
             }
           }
-          
+
           this.calculateTotalExpenses();
 
         });
@@ -103,7 +102,6 @@ export class ExpenseComponent implements OnInit, OnDestroy {
               this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
             });
       }
-
     });
   }
 

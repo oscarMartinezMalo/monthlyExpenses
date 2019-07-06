@@ -6,21 +6,25 @@
   <mat-card class="example-card ">
     <mat-form-field class="example-full-width">
       <mat-label>Email</mat-label>
-      <input matInput id="email" name="email" type="email" ngModel>
+      <input matInput id="email" name="email" type="email" ngModel required email #email="ngModel">
       <mat-icon matSuffix>mail_outline</mat-icon>
+      <mat-error *ngIf="!email.valid && email.touched">
+        Invalid Email</mat-error>
     </mat-form-field>
 
     <mat-form-field class="example-full-width">
       <mat-label>Password</mat-label>
-      <input matInput id="password" name="password" type="password" ngModel maxlength="25">
+      <input matInput id="password" name="password" type="password" ngModel maxlength="25" minlength="3" required #password="ngModel">
       <mat-icon matSuffix>lock_open</mat-icon>
+      <mat-error *ngIf="!password.valid && email.touched">
+        Invalid Password</mat-error>
     </mat-form-field>
 
     <button class="forgot-password" mat-button routerLink="/forgotpass" color="primary">Forgot your password?</button>
-    
+
     <br>
 
-    <button mat-raised-button type="submit" color="primary">
+    <button mat-raised-button type="submit" color="primary" [disabled]="!f.valid">
       <span matPrefix style="margin-right:100px;">Sign In</span>
       <mat-icon>mail_outline</mat-icon>
     </button>

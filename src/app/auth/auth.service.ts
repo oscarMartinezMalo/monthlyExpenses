@@ -56,7 +56,7 @@ export class AuthService {
     oAuthLogin(provider) {
         return this.afAuth.auth.signInWithPopup(provider).
             then((credential) => {
-                this.displayMessaggeSnackBar('You just Signed In', 'X');
+                // this.displayMessaggeSnackBar('You just Signed In', 'X');
                 this.router.navigate(['/expense']);
                 this.updateUserData(credential.user);
             });
@@ -80,7 +80,7 @@ export class AuthService {
 
         this.afAuth.auth.createUserWithEmailAndPassword(email, password)
             .then(credential => {
-                this.displayMessaggeSnackBar('You just Signed Up', 'X');
+                // this.displayMessaggeSnackBar('You just Signed Up', 'X');
                 // this.router.navigate(['/expense']);
                 // this.updateUserData(credential.user);
 
@@ -110,7 +110,7 @@ export class AuthService {
                 // Email verification
                 if (credential.user.emailVerified) {
                     this.router.navigate(['/expense']);
-                    this.displayMessaggeSnackBar('You just logged in', 'X');
+                    // this.displayMessaggeSnackBar('You just logged in', 'X');
                     this.updateUserData(credential.user);
                 } else {
                     this.displayMessaggeSnackBar('Please validate your email address. Check your inbox', 'X');

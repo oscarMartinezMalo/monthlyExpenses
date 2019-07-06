@@ -27,5 +27,8 @@
     // padding: 0px;
 }
 
+mat-form-field.ng-invalid.ng-touched mat-icon {
+    color: red;
+}
 // .forgot-password:hover {
 // }

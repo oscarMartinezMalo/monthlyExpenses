@@ -6,17 +6,22 @@
 
     <mat-form-field class="example-full-width">
       <mat-label>Email</mat-label>
-      <input matInput id="email" name="email" type="email" ngModel>
+      <input matInput id="email" name="email" type="email" ngModel required email #email="ngModel">
       <mat-icon matSuffix>mail</mat-icon>
+      <mat-error *ngIf="!email.valid && email.touched">
+        Invalid Email</mat-error>
       </mat-form-field>
 
       <mat-form-field class="example-full-width">
         <mat-label>Password</mat-label>
-        <input matInput id="password" name="password" type="password" ngModel>
+        <input matInput id="password" name="password" type="password" ngModel maxlength="25" minlength="3" required  #password="ngModel">
         <mat-icon matSuffix>lock</mat-icon>
+        <mat-error *ngIf="!password.valid && email.touched">
+          Invalid Password</mat-error>
       </mat-form-field>
 
-      <button mat-raised-button type="submit" color="primary">Sign Up</button>
+      <button mat-raised-button class="mt-2" type="submit" color="primary"  [disabled]="!f.valid">Sign Up</button>
 
   </mat-card>
 </form>
+
